@@ -30,10 +30,12 @@ __Note__
 The first two digits of the fips county code designate the state (or equivalent territory) of the county. A list of the 2-digits fips state code, with  the respective 2-letter abbreviature and  state name can be found <a href="https://www2.census.gov/geo/docs/reference/state.txt">here</a>. An extended list which includes the fips codes for the Outlying Areas of the United States, the Freely Associated States and the Individual Minor Outlying Island Territories can also be found <a href="https://www.census.gov/geo/reference/ansi_statetables.html">here</a>.
 While separating the list of fips numbers by state (first 2 digits of the county fips code), a few anomalies were detected:
 
-1. __County fips code 00000__: This code is used to represent the USA as a whole unit. However, only values from 2002 and 2005 are present and therefore this data is filtered out.
-2. __No county fips code (NA)__: It is not clear to which territory this data corresponds and therefore this data is filtered out.
-3. __State fips code 85__: There is no state corresponding to this code, even in the extended territory list. Therefore this data is filtered out.
-4. __State fips code "TR"__: There is no state corresponding to this code, even in the extended territory list. Therefore this data is filtered out.
+1. __County fips code 00000__: This code is used to represent the USA as a whole unit. However, only values from 2002 and 2005 are present.
+2. __No county fips code (NA)__: It is not clear to which territory this data corresponds.
+3. __State fips code 85__: There is no state corresponding to this code, even in the extended territory list.
+4. __State fips code "TR"__: There is no state corresponding to this code, even in the extended territory list.
+
+When organizing the PM2.5 emissions by state, the previous 4 categories will be grouped together in the state='NA' group.
 
 The definition of 'motor vehicle' according to <a href="https://en.wikipedia.org/wiki/Motor_vehicle">Wikipedia</a> is _a self-propelled vehicle, commonly wheeled, that does not operate on rails (such as trains or trams) and is used for the transportation of people or cargo_. As such, we consider that a given source (SCC) refers to a 'motor vehicle' if:
 
@@ -81,9 +83,7 @@ The definition of 'motor vehicle' according to <a href="https://en.wikipedia.org
 
 ## Final Data
 
-### Structure
+The final output of this assignment consists of six different plots that portrait the temporal evolution of the emissions of PM2.5 by different types of pollution sources and locations. In all the the plots, the data is grouped by the relevant variables, e.g., _year_, _fips_, _state_, and then the total sum of emissions in each group is calculated. In plots 3, 5 and 6, the relative variation of the emissions (in \%) is also shown:
 
-### Files
-
-## Processing the data
-
+* __Variation from 1999 (\%)__ = 100 * (emissions(#year)/emissions(1999) - 1): the relative variation of the emissions of PM2.5 compared to the initial value in 1999. For _year=1999_, a 'NA' value is assigned.
+* __3 year Variation (\%)__ = 100 * (emissions(#year)/emissions(#year-1) - 1): the relative variation of the emissions of PM2.5 compared to the previous year.For _year=1999_, a 'NA' value is assigned.

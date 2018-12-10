@@ -1,7 +1,17 @@
+#-------------------------
+#
+#       Packages required
+#
+#-------------------------
 library(dplyr)
 library(ggplot2)
 library(tidyr)
 
+#-------------------------
+#
+#       Filtering motor vehicles from sources list
+#
+#-------------------------
 filter_SCCL4 <- paste(
     "(All$)",
     "(Total$)",
@@ -35,14 +45,20 @@ SCC_motorvehicles <- readRDS("Source_Classification_Code.rds")  %>%
         select = 1
     )
 
+## List to replace fips code by county name
 fips_names <- data.frame("code" = c("06037","24510"), "names" = c("Los Angeles County","Baltimore City"))
 
+#-------------------------
+#
+#       Reading data and calculating total emissions
+#
+#-------------------------
 PM25_data <- readRDS("summarySCC_PM25.rds") %>%
-    filter(fips=="06037"|fips=="24510") %>%
-    filter(SCC %in% as.character(SCC_motorvehicles$SCC)) %>%
+    filter(fips=="06037"|fips=="24510") %>% # selecting Baltimore City and Los Angeles County
+    filter(SCC %in% as.character(SCC_motorvehicles$SCC)) %>% # selecting motor vehicles
     mutate(
         year = factor(year),
-        Emissions = Emissions/10^2
+        Emissions = Emissions/10^2  # emissions in 10^2tons
     ) %>%
     group_by(fips,year) %>%
     summarize(
@@ -56,18 +72,23 @@ PM25_data <- readRDS("summarySCC_PM25.rds") %>%
             ])
     ) %>%
     mutate(
-        var_to_init = ave(totalemissions, fips, FUN=function(x) 100*c(NA, tail(x,-1)/head(x,1)-1)),
-        var_to_previous = ave(totalemissions, fips, FUN=function(x) 100*c(NA, diff(x)/head(x,-1)))
+        var_to_init = ave(totalemissions, fips, FUN=function(x) 100*c(NA, tail(x,-1)/head(x,1)-1)), # variation to 1999 (%)
+        var_to_previous = ave(totalemissions, fips, FUN=function(x) 100*c(NA, diff(x)/head(x,-1))) # 3 year variation (%)
     ) %>%
     gather(
         key = measure, 
         value = value, 
         totalemissions:var_to_previous,
         na.rm = TRUE
-    ) 
+    )  # gathering data for plotting
 
 
 
+#-------------------------
+#
+#       Plotting
+#
+#-------------------------
 g <- ggplot(PM25_data, aes(year,value,fill=fips))
 
 (g + geom_bar(stat="identity", position=position_dodge()) +

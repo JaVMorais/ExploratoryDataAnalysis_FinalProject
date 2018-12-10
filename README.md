@@ -18,4 +18,22 @@ For each of the following questions/tasks make a single plot using any plotting 
 
 This repo contains:
 
-## Script 
+* Six scripts 'plot#.R' (#=1,...,6) that produce the respective plot 'plot#.png'.
+* Six .png files 'plot#.png' (#=1,...,6) with the plot for each of the si questions of the assignment.
+* A codebook 'CodeBook.md'.
+
+## Scripts
+
+Apart from the base R, the scripts bellow use (at least one of) the following packages:
+
+* dplyr
+* ggplot2
+* tidyr
+
+
+1. __'plot1.R'__ - sums all the emissions for each year and produces a bar plot with 'total emissions' vs 'year' using the base plot system.
+2. __'plot2.R'__ - filters the data using the fips code of Baltimore city, sums all the emissions for each year and produces a bar plot with 'total emissions' vs 'year' using the base plot system.
+3. __'plot3.R'__ - filters the data using the fips code of Baltimore city and sums all the emissions for each year and type. For each year and type calculates the relative variation with respect to the initial value ('Vatiation from 1999 (\%)') and to the previous year ('3 year variation (\%)'). Finally, the script produces a bar plot with 'total emissions', 'Vatiation from 1999 (\%)' and '3 year variation (\%)' vs 'year' using the ggplot2 plot system.
+4. __'plot4.R'__ - extracts the state identifier from the 2 initial digits of the fips code and sums all the emissions for each year and state. Emissions for which a state cannot be assigned based on the fips code are grouped in _'state'=='NA_. The total emissions per year are calculated and appended to the dataframe with a 'state' identifier 'USA'.  Finally, the script produces a grid of bar plots with 'total emissions' vs 'year' per state using the ggplot2 plot system. 
+5. __'plot5.R'__ - filters the data using the fips code of Baltimore city and the list of emission sources in order to select only 'motor vehicles' according to criteria defined in the CodeBook. The total emissions per year are calculated  and as well as the relative variation with respect to the initial value ('Vatiation from 1999 (\%)') and to the previous year ('3 year variation (\%)'). Finally, the script produces a bar plot with 'total emissions', 'Vatiation from 1999 (\%)' and '3 year variation (\%)' vs 'year' using the ggplot2 plot system.
+6. __'plot6.R'__ - filters the data using the fips code of Baltimore city and Los Angeles County and the list of emission sources in order to select only 'motor vehicles' according to criteria defined in the CodeBook. The total emissions per year are calculated  and as well as the relative variation with respect to the initial value ('Vatiation from 1999 (\%)') and to the previous year ('3 year variation (\%)'). Finally, the script produces a bar plot with 'total emissions', 'Vatiation from 1999 (\%)' and '3 year variation (\%)' vs 'year' using the ggplot2 plot system.

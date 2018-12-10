@@ -1,19 +1,28 @@
+#-------------------------
+#
+#       Packages required
+#
+#-------------------------
 library(dplyr)
 library(ggplot2)
 library(tidyr)
 
-
+#-------------------------
+#
+#       Reading data and calculating total emissions and relative variations
+#
+#-------------------------
 PM25_data <- readRDS("summarySCC_PM25.rds") %>%
-    filter(fips=="24510") %>%
+    filter(fips=="24510") %>%  # selecting Baltimore City
     mutate(
         year = factor(year),
         type = factor(type, unique(type))
         ) %>%
     group_by(type,year) %>%
-    summarize(totalemissions = sum(Emissions)/10^3) %>%
+    summarize(totalemissions = sum(Emissions)/10^3) %>%  # total emissions by year by type in 10^3tons
     mutate(
-        var_to_init = ave(totalemissions, type, FUN=function(x) 100*c(NA, tail(x,-1)/head(x,1)-1)),
-        var_to_previous = ave(totalemissions, type, FUN=function(x) 100*c(NA, diff(x)/head(x,-1)))
+        var_to_init = ave(totalemissions, type, FUN=function(x) 100*c(NA, tail(x,-1)/head(x,1)-1)), # variation to 1999 (%)
+        var_to_previous = ave(totalemissions, type, FUN=function(x) 100*c(NA, diff(x)/head(x,-1)))  # 3 year variation (%)
     )%>%
     gather(
         key = measure, 
@@ -21,9 +30,14 @@ PM25_data <- readRDS("summarySCC_PM25.rds") %>%
         totalemissions:var_to_previous,
         na.rm = TRUE,
         factor_key = TRUE
-    ) 
+    ) # gathering data for plotting
 
 
+#-------------------------
+#
+#       Plotting
+#
+#-------------------------
 ggplot(PM25_data, aes(year,value, color=type, fill = type)) %>%
      + geom_bar(stat="identity",fill="white", position=position_dodge()) %>% 
      + geom_text(
